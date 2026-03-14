@@ -11,7 +11,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+
     @Override
     public Product addProduct(Product product) {
         return null;
@@ -56,16 +57,16 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getProductsByName(String name) {
-        return List.of();
+        return productRepository.findByName(name);
     }
 
     @Override
-    public List<Product> getProductsByBrandAndNames(String category, String name) {
-        return List.of();
+    public List<Product> getProductsByBrandAndNames(String brand, String name) {
+        return productRepository.findByBrandAndName(brand,name);
     }
 
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
-        return null;
+        return productRepository.countByBrandAndName(brand , name);
     }
 }
