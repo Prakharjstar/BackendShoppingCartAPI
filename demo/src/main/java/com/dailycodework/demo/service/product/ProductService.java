@@ -4,59 +4,22 @@ import com.dailycodework.demo.model.Product;
 
 import java.util.List;
 
-public class ProductService implements ProductServiceImpl {
-    @Override
-    public Product addProduct(Product product) {
-        return null;
-    }
+public interface ProductService {
 
-    @Override
-    public Product getProductById(Long id) {
-        return null;
-    }
+    Product addProduct(Product product);
+    Product getProductById(Long id);
+    void deleteProductById(Long id);
+    void updateProduct(Product product , Long productId);
+    List<Product> getAllProduct();
+    List<Product> getProductByCategory(String category);
+    List<Product> getProductsByBrand(String brand);
+    List<Product> getProductsByCategoryAndBrand(String category , String brand);
+    List<Product> getProductsByName(String name);
+    List<Product> getProductsByBrandAndNames(String category ,String name);
+    Long countProductsByBrandAndName(String brand , String name);
 
-    @Override
-    public void deleteProductById(Long id) {
 
-    }
 
-    @Override
-    public void updateProduct(Product product, Long productId) {
 
-    }
 
-    @Override
-    public List<Product> getAllProduct() {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> getProductByBrand(Long category) {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> getProductsByBrand(String brand) {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> getProductsByName(String name) {
-        return List.of();
-    }
-
-    @Override
-    public List<Product> getProductsByBrandAndNames(String category, String name) {
-        return List.of();
-    }
-
-    @Override
-    public Long countProductsByBrandAndName(String brand, String name) {
-        return null;
-    }
 }
