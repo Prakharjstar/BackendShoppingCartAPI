@@ -1,21 +1,47 @@
 package com.dailycodework.demo.service.product;
 
 import com.dailycodework.demo.Exceptions.ProductNotFoundException;
+import com.dailycodework.demo.Repositories.CategoryRepository;
 import com.dailycodework.demo.Repositories.ProductRepository;
+import com.dailycodework.demo.model.Category;
 import com.dailycodework.demo.model.Product;
+import com.dailycodework.demo.request.AddProductRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public Product addProduct(Product product) {
-        return null;
+    public Product addProduct(AddProductRequest request) {
+
+        Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName())).orElseGet(() -> {
+            Category newCategory = new Category(request.getCategory().getName());
+            return categoryRepository.save(newCategory);
+        });
+        request.setCategory(category);
+        return productRepository.save(createProduct(request,category));
+
+
+
+    }
+
+    private Product createProduct(AddProductRequest request , Category category){
+        return new Product(request.getName(),
+                request.getBrand(),
+                request.getPrice(),
+                request.getInventory(),
+                request.getDescription(),
+                category
+
+                );
     }
 
     @Override

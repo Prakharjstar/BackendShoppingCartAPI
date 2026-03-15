@@ -1,12 +1,13 @@
 package com.dailycodework.demo.service.product;
 
 import com.dailycodework.demo.model.Product;
+import com.dailycodework.demo.request.AddProductRequest;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Product addProduct(Product product);
+    Product addProduct( AddProductRequest product);
     Product getProductById(Long id);
     void deleteProductById(Long id);
     void updateProduct(Product product , Long productId);
