@@ -16,12 +16,16 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@RequiredArgsConstructor
+
 @RestController
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
 
     private final ProductService productService;
+
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
 
     @GetMapping("/all")
@@ -146,9 +150,19 @@ public class ProductController {
                 return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("No Product Found" , null));
             }
             return ResponseEntity.ok(new ApiResponse("success " , products));
-        } catch (ResourceNotFoundException e) {
+        } catch (Exception e) {
             return ResponseEntity.ok(new ApiResponse(e.getMessage() , null));
 
+        }
+    }
+
+    @GetMapping("/product/count/by-brand/and-name")
+    public ResponseEntity<ApiResponse> countProductByBrandAndName(@RequestParam String brand , @RequestParam String name){
+        try{
+            Long productCount = productService.countProductsByBrandAndName(brand , name);
+            return ResponseEntity.ok(new ApiResponse("Product count!", productCount));
+        }catch(Exception e){
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
         }
     }
 

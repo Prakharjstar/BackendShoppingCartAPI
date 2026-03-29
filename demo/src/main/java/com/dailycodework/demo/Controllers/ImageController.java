@@ -20,11 +20,15 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
-@RequiredArgsConstructor
+
 @RestController
 @RequestMapping("${api.prefix}/images")
 public class ImageController {
     private final ImageService imageService;
+
+    public ImageController(ImageService imageService) {
+        this.imageService = imageService;
+    }
 
 
     @PostMapping("/upload")

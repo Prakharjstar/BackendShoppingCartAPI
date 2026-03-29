@@ -17,8 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+
 public class ImageServiceImpl implements ImageService{
+    public ImageServiceImpl(ProductService productService, ImageRepository imageRepository) {
+        this.productService = productService;
+        this.imageRepository = imageRepository;
+    }
+
     private final ImageRepository imageRepository;
     private final ProductService productService;
 

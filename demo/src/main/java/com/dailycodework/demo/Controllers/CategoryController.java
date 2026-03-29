@@ -13,10 +13,14 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
-@RequiredArgsConstructor
+
 @RestController
 @RequestMapping("${api.prefix}/categories")
 public class CategoryController {
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     private final CategoryService categoryService;
 
@@ -81,15 +85,18 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/category/{id}/delete")
-    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id , @RequestBody Category category){
-        try{
-           Category updateCategory =   categoryService.updateCategory( category, id);
-            return ResponseEntity.ok(new ApiResponse("Update Success " , updateCategory));
+    @PutMapping("/category/{id}/update")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable Long id,
+                                                      @RequestBody Category category) {
+        try {
+            Category updatedCategory = categoryService.updateCategory(category, id);
+            return ResponseEntity.ok(new ApiResponse("Update Success", updatedCategory));
 
-        }catch (ResourceNotFoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND)
+                    .body(new ApiResponse(e.getMessage(), null));
         }
+    }
     }
 
 
@@ -98,4 +105,4 @@ public class CategoryController {
 
 
 
-}
+
