@@ -38,53 +38,58 @@ public class ImageServiceImpl implements ImageService{
         imageRepository.findById(id).ifPresentOrElse(imageRepository::delete , () -> { throw new ResourceNotFoundException("No image is found with this Id " + id);});
 
     }
-
     @Override
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
-        List<ImageDto> savedImageDto = new ArrayList<>();
-        for(MultipartFile file: files){
-            try{
+        List<ImageDto> savedImageDtos = new ArrayList<>();
+
+        String buildDownloadUrl = "/api/v1/images/image/download/";
+
+        for (MultipartFile file : files) {
+            try {
                 Image image = new Image();
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
                 image.setProduct(product);
 
-                String buildDownloadUrl = "/api/v1/images/image/download/";
-                String downloadUrl = buildDownloadUrl + image.getId();
-                image.setDownloadUrl(downloadUrl);
-              Image savedImage =  imageRepository.save(image);
-              savedImage.setDownloadUrl(buildDownloadUrl + savedImage.getId());
-              imageRepository.save(savedImage);
+                // First save to generate the ID
+                Image savedImage = imageRepository.save(image);
 
-              ImageDto imageDto = new ImageDto();
-              imageDto.setImageId(savedImage.getId());
-              imageDto.setImageName(savedImage.getFileName());
-              imageDto.setDownloadUrl(savedImage.getDownloadUrl());
-               savedImageDto.add(imageDto);
+                // Now create the download URL using the generated ID
+                savedImage.setDownloadUrl(buildDownloadUrl + savedImage.getId());
 
+                // Save again with updated download URL
+                savedImage = imageRepository.save(savedImage);
 
-        }catch(IOException  | SQLException e){
-                throw  new RuntimeException(e.getMessage());
+                ImageDto imageDto = new ImageDto();
+                imageDto.setImageId(savedImage.getId());
+                imageDto.setImageName(savedImage.getFileName());
+                imageDto.setDownloadUrl(savedImage.getDownloadUrl());
+
+                savedImageDtos.add(imageDto);
+
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException("Failed to save image: " + e.getMessage());
             }
+        }
 
-            }
-        return savedImageDto;
+        return savedImageDtos;
     }
 
     @Override
     public void updateImage(MultipartFile file, Long imageId) {
-
         Image image = getImageById(imageId);
+
         try {
             image.setFileName(file.getOriginalFilename());
-            image.setFileName(file.getOriginalFilename());
+            image.setFileType(file.getContentType());
             image.setImage(new SerialBlob(file.getBytes()));
-            imageRepository.save(image);
-        } catch (IOException | SQLException e) {
-            throw new RuntimeException(e);
-        }
 
+            imageRepository.save(image);
+
+        } catch (IOException | SQLException e) {
+            throw new RuntimeException("Failed to update image: " + e.getMessage());
+        }
     }
 }
