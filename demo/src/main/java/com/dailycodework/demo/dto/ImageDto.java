@@ -4,6 +4,9 @@ import lombok.Data;
 
 @Data
 public class ImageDto {
+    private Long imageId;
+    private String imageName;
+    private String downloadUrl;
     public Long getImageId() {
         return imageId;
     }
@@ -28,8 +31,6 @@ public class ImageDto {
         this.downloadUrl = downloadUrl;
     }
 
-    private Long imageId;
-    private String imageName;
-    private String downloadUrl;
+
 
 }
