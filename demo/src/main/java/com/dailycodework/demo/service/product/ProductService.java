@@ -1,5 +1,6 @@
 package com.dailycodework.demo.service.product;
 
+import com.dailycodework.demo.dto.ProductDto;
 import com.dailycodework.demo.model.Product;
 import com.dailycodework.demo.request.AddProductRequest;
 import com.dailycodework.demo.request.ProductUpdateRequest;
@@ -21,7 +22,7 @@ public interface ProductService {
     Long countProductsByBrandAndName(String brand , String name);
 
 
+    List<ProductDto> getConvertedProducts(List<Product> products);
 
-
-
+    ProductDto convertToDto(Product product);
 }
