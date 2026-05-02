@@ -1,5 +1,6 @@
 package com.dailycodework.demo.service.Cart;
 
+import com.dailycodework.demo.Exceptions.ResourceNotFoundException;
 import com.dailycodework.demo.Repositories.CartItemRepository;
 import com.dailycodework.demo.Repositories.CartRepository;
 import com.dailycodework.demo.model.Cart;
@@ -8,7 +9,7 @@ import com.dailycodework.demo.model.Product;
 import com.dailycodework.demo.service.product.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Service
 public class CartItemServiceImpl implements CartItemService {
@@ -54,11 +55,36 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public void removeItemFromCart(Long cartId, Long productId) {
+        Cart cart = cartService.getCart(cartId);
+        CartItem itemToRemove = getCartItem(cartId , productId);
+        cart.removeItem(itemToRemove);
+        cartRepository.save(cart);
+
 
     }
 
     @Override
     public void updateItemQuantity(Long cartId, Long productId, int quantity) {
+        Cart cart = cartService.getCart(cartId);
+        cart.getCartItems()
+                .stream()
+                .filter(item-> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(item->{
+                    item.setQuantity(quantity);
+                    item.setUnitPrice(item.getProduct().getPrice());
+                    item.setTotalPrice();
+                });
+        BigDecimal totalAmount = cart.getTotalAmount();
+        cart.setTotalAmount(totalAmount);
+        cartRepository.save(cart);
 
+    }
+
+    @Override
+    public CartItem getCartItem(Long cartId, Long productId){
+        Cart cart = cartService.getCart(cartId);
+        return cart.getCartItems().stream().filter(item->item.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(()-> new ResourceNotFoundException("Product not found") );
     }
 }
