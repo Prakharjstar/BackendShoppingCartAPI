@@ -7,6 +7,9 @@ package com.dailycodework.demo.Response;
 
 public class ApiResponse {
 
+    private String message;
+    private Object data;
+
     public ApiResponse(String message, Object data) {
         this.message = message;
         this.data = data;
@@ -28,6 +31,5 @@ public class ApiResponse {
         this.data = data;
     }
 
-    private String message;
-    private Object data;
+
 }
