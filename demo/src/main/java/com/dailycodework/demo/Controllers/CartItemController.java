@@ -3,6 +3,7 @@ package com.dailycodework.demo.Controllers;
 import com.dailycodework.demo.Exceptions.ResourceNotFoundException;
 import com.dailycodework.demo.Response.ApiResponse;
 import com.dailycodework.demo.service.Cart.CartItemService;
+import com.dailycodework.demo.service.Cart.CartService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +14,21 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 public class CartItemController {
 
     private final CartItemService cartItemService;
+    private final CartService cartService;
 
-    public CartItemController(CartItemService cartItemService) {
+    public CartItemController(CartItemService cartItemService, CartService cartService) {
         this.cartItemService = cartItemService;
+        this.cartService = cartService;
     }
 
     @PostMapping("/item/add")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long cartId, @RequestParam Long productId, @RequestParam Integer quantity) {
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId, @RequestParam Long productId, @RequestParam Integer quantity) {
         try {
+            if(cartId== null){
+              cartId=  cartService.initializeNewCart();
+
+
+            }
             cartItemService.addItemToCart(cartId, productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
