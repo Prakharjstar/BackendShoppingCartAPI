@@ -4,6 +4,7 @@ import com.dailycodework.demo.Exceptions.ResourceNotFoundException;
 import com.dailycodework.demo.Repositories.CartItemRepository;
 import com.dailycodework.demo.Repositories.CartRepository;
 import com.dailycodework.demo.model.Cart;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class CartServiceImpl implements CartService{
                 .orElseThrow(() -> new ResourceNotFoundException("Cart not found"));
     }
 
+    @Transactional
     @Override
     public void clearCart(Long id) {
         Cart cart = getCart(id);
