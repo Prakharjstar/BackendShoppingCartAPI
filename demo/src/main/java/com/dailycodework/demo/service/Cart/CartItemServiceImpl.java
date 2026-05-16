@@ -9,8 +9,6 @@ import com.dailycodework.demo.model.Product;
 import com.dailycodework.demo.service.product.ProductService;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-
 @Service
 public class CartItemServiceImpl implements CartItemService {
 
@@ -85,5 +83,11 @@ public class CartItemServiceImpl implements CartItemService {
         Cart cart = cartService.getCart(cartId);
         return cart.getCartItems().stream().filter(item->item.getProduct().getId().equals(productId))
                 .findFirst().orElseThrow(()-> new ResourceNotFoundException("Product not found") );
+    }
+
+    @Override
+    public Cart getCartByUserId(Long userId){
+
+        return cartRepository.findByUserId(userId);
     }
 }

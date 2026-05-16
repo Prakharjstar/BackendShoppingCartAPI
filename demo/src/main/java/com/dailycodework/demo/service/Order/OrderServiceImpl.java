@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Order placeOrder(Long userId) {
-        Cart cart = cartService.getCart(userId);
+        Cart cart = cartService.getCartByUserId(userId);
         Order order = createOrder(cart);
         List<OrderItem> orderItemList = createOrderItems(order,cart);
         order.setOrderItems( new HashSet<>(orderItemList));
@@ -84,6 +84,10 @@ public class OrderServiceImpl implements OrderService{
         return orderRepository.findById(orderId)
                 .orElseThrow(()-> new ResourceNotFoundException("Order not found"));
 
+    }
+
+    public List<Order> getUserOrders(Long userId){
+        return orderRepository.findByUserId(userId);
     }
 
 

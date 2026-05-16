@@ -1,5 +1,6 @@
 package com.dailycodework.demo.service.Cart;
 
+import com.dailycodework.demo.model.Cart;
 import com.dailycodework.demo.model.CartItem;
 
 public interface CartItemService {
@@ -9,4 +10,6 @@ public interface CartItemService {
     void updateItemQuantity(Long cartId , Long productId , int quantity);
 
     CartItem getCartItem(Long cartId, Long productId);
+
+    Cart getCartByUserId(Long userId);
 }
