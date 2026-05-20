@@ -82,10 +82,11 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public Order getOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                .orElseThrow(()-> new ResourceNotFoundException("Order not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("No Order found"));
 
     }
 
+    @Override
     public List<Order> getUserOrders(Long userId){
         return orderRepository.findByUserId(userId);
     }
