@@ -21,6 +21,11 @@ public class User {
     private String lastName;
     private String email;
     private String password;
+    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private Cart cart;
+
+    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Order> order;
 
 
     public String getFirstName() {
@@ -73,9 +78,5 @@ public class User {
 
 
 
-    @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private Cart cart;
 
-    @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<Order> order;
 }
