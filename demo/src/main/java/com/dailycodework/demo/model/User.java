@@ -14,6 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class User {
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -74,6 +77,14 @@ public class User {
 
     public void setOrder(List<Order> order) {
         this.order = order;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 

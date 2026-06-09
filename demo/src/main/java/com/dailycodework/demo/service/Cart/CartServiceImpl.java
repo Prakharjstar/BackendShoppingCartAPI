@@ -4,11 +4,12 @@ import com.dailycodework.demo.Exceptions.ResourceNotFoundException;
 import com.dailycodework.demo.Repositories.CartItemRepository;
 import com.dailycodework.demo.Repositories.CartRepository;
 import com.dailycodework.demo.model.Cart;
+import com.dailycodework.demo.model.User;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Optional;
 
 @Service
 public class CartServiceImpl implements CartService{
@@ -47,9 +48,12 @@ public class CartServiceImpl implements CartService{
 
 
     @Override
-    public Long initializeNewCart() {
-        Cart newCart = new Cart();
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user) {
+      return Optional.ofNullable(getCartByUserId(user.getId())).orElseGet(()-> {
+          Cart cart = new Cart();
+          cart.setUser(user);
+          return  cartRepository.save(cart);
+      });
     }
 
     @Override

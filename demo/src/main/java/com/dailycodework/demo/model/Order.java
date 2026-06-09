@@ -13,6 +13,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @Entity
+@Table(name = "customer_orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
