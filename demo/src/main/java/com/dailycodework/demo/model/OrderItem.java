@@ -59,7 +59,7 @@ public class OrderItem {
     }
 
     private BigDecimal price;
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

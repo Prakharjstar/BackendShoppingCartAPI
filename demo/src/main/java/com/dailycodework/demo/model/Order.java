@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,25 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
-    private LocalDate orderDate;
+
+    public LocalDateTime getOrderDate() {
+        return orderDate;
+    }
+
+    private LocalDateTime orderDate;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private Set<OrderItem> orderItems = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+    public void setOrderDate(LocalDateTime orderDate) {
+        this.orderDate = orderDate;
+    }
+
     private BigDecimal totalAmount;
 
     public BigDecimal getTotalAmount() {
@@ -53,13 +72,7 @@ public class Order {
         this.user = user;
     }
 
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
 
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
-    }
 
     public Long getOrderId() {
         return orderId;
@@ -69,12 +82,6 @@ public class Order {
         this.orderId = orderId;
     }
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
-    @OneToMany(mappedBy = "order" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private Set<OrderItem> orderItems = new HashSet<>();
 
-    @ManyToOne
-    @JoinColumn(name="user_id")
-    private User user;
+
 }

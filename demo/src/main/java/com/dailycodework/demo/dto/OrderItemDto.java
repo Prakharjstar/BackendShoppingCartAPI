@@ -9,6 +9,9 @@ public class OrderItemDto {
 
     private Long productId;
     private String productName;
+    private String productBrand;
+
+
     private int quantity;
     private BigDecimal price;
 
@@ -43,6 +46,13 @@ public class OrderItemDto {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+    public String getProductBrand() {
+        return productBrand;
+    }
+
+    public void setProductBrand(String productBrand) {
+        this.productBrand = productBrand;
     }
 
 
