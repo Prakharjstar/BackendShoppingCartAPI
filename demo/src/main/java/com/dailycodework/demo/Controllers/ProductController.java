@@ -1,6 +1,7 @@
 package com.dailycodework.demo.Controllers;
 
 
+import com.dailycodework.demo.Exceptions.AlreadyExistsException;
 import com.dailycodework.demo.Exceptions.ResourceNotFoundException;
 import com.dailycodework.demo.Response.ApiResponse;
 import com.dailycodework.demo.dto.ProductDto;
@@ -14,8 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 
 @RestController
@@ -55,8 +55,8 @@ public class ProductController {
             ProductDto productDto = productService.convertToDto(theProduct);
 
             return ResponseEntity.ok(new ApiResponse("Add Product Success" , productDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage() , null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage() , null));
         }
 
     }

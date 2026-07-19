@@ -1,5 +1,6 @@
 package com.dailycodework.demo.service.product;
 
+import com.dailycodework.demo.Exceptions.AlreadyExistsException;
 import com.dailycodework.demo.Exceptions.ProductNotFoundException;
 import com.dailycodework.demo.Repositories.CategoryRepository;
 import com.dailycodework.demo.Repositories.ImageRepository;
@@ -37,6 +38,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product addProduct(AddProductRequest request) {
 
+        if(productExists(request.getName() , request.getBrand())){
+            throw new AlreadyExistsException(request.getBrand() +" "+ request.getName() +" already exists , you may update this product instead!");
+        }
+
         Category category = Optional.ofNullable(
                 categoryRepository.findByName(request.getCategory().getName())
         ).orElseGet(() -> {
@@ -48,6 +53,19 @@ public class ProductServiceImpl implements ProductService {
         Product product = createProduct(request, category);
         return productRepository.save(product);
     }
+
+
+    private boolean productExists(String name , String brand){
+        return productRepository.existsByNameAndBrand(name,brand);
+    }
+
+
+
+
+
+
+
+
 
     private Product createProduct(AddProductRequest request, Category category) {
         return new Product(
