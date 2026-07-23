@@ -1,4 +1,4 @@
-package com.dailycodework.demo.Config;
+package com.dailycodework.demo.Security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
