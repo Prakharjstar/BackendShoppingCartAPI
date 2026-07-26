@@ -1,6 +1,7 @@
 package com.dailycodework.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
@@ -53,7 +54,7 @@ public class Category {
 
 
     @OneToMany(mappedBy = "category" )
-    @JsonBackReference
+    @JsonManagedReference
     private List<Product> products;
 
     public Category(String name) {

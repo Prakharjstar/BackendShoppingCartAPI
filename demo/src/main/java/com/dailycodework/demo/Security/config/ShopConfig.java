@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.util.List;
 
+
 @Configuration
 @EnableWebSecurity
 public class ShopConfig {
@@ -28,7 +29,7 @@ public class ShopConfig {
     private final ShopUserDetailsService userDetailsService;
     private final JwtAuthEntryPoint authEntryPoint;
 
-    private static final List<String> SECURED_URLS = List.of("");
+    private static final List<String> SECURED_URLS = List.of("/api/v1/cart/**" , "/api/v1/cartItems/**");
 
     public ShopConfig(ShopUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
         this.userDetailsService = userDetailsService;
@@ -65,6 +66,7 @@ public class ShopConfig {
         return authProvider;
     }
 
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer :: disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPoint))

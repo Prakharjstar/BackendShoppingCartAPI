@@ -8,6 +8,9 @@ import com.dailycodework.demo.model.User;
 import com.dailycodework.demo.request.CreateUserRequest;
 import com.dailycodework.demo.request.UserUpdateRequest;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -15,11 +18,12 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService{
     private final ModelMapper modelMapper;
-
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserServiceImpl(ModelMapper modelMapper, UserRepository userRepository) {
+    public UserServiceImpl(ModelMapper modelMapper, PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
@@ -34,7 +38,7 @@ public class UserServiceImpl implements UserService{
                 .map(req-> {
                     User user = new User();
                     user.setEmail(request.getEmail());
-                    user.setPassword(request.getPassword());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
                     return userRepository.save(user);
@@ -62,5 +66,12 @@ public class UserServiceImpl implements UserService{
     public UserDto convertUserToDto(User user){
         return modelMapper.map(user,UserDto.class);
 
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return userRepository.findByEmail(email);
     }
 }

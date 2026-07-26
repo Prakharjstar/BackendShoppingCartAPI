@@ -7,10 +7,12 @@ import com.dailycodework.demo.model.User;
 import com.dailycodework.demo.service.Cart.CartItemService;
 import com.dailycodework.demo.service.Cart.CartService;
 import com.dailycodework.demo.service.User.UserService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("${api.prefix}/cartItems")
@@ -29,7 +31,7 @@ public class CartItemController {
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart( @RequestParam Long productId, @RequestParam Integer quantity) {
         try {
-            User user = userService.getUserById(1L);
+            User user = userService.getAuthenticatedUser();
 
              Cart cart=  cartService.initializeNewCart(user);
 
@@ -39,6 +41,9 @@ public class CartItemController {
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }catch (JwtException e){
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(),null));
+
         }
     }
 
