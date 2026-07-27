@@ -9,8 +9,8 @@ import com.dailycodework.demo.model.Product;
 import com.dailycodework.demo.request.AddProductRequest;
 import com.dailycodework.demo.request.ProductUpdateRequest;
 import com.dailycodework.demo.service.product.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +48,7 @@ public class ProductController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product){
         try {
@@ -61,7 +62,7 @@ public class ProductController {
 
     }
 
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/Product/{ProductId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody ProductUpdateRequest request , @PathVariable  Long productId){
 
@@ -73,7 +74,7 @@ public class ProductController {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage() , null));
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/product/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId){
         try {
@@ -165,7 +166,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/count/by-brand/and-name")
+    @GetMapping("/product/count/by-brand")
     public ResponseEntity<ApiResponse> countProductByBrandAndName(@RequestParam String brand , @RequestParam String name){
         try{
             Long productCount = productService.countProductsByBrandAndName(brand , name);
