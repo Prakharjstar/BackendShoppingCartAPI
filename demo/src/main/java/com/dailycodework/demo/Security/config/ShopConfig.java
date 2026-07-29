@@ -2,6 +2,7 @@ package com.dailycodework.demo.Security.config;
 
 import com.dailycodework.demo.Security.jwt.AuthTokenFilter;
 import com.dailycodework.demo.Security.jwt.JwtAuthEntryPoint;
+import com.dailycodework.demo.Security.jwt.JwtUtils;
 import com.dailycodework.demo.Security.user.ShopUserDetailsService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -28,12 +29,14 @@ public class ShopConfig {
 
     private final ShopUserDetailsService userDetailsService;
     private final JwtAuthEntryPoint authEntryPoint;
+    private final JwtUtils jwtUtils;
 
     private static final List<String> SECURED_URLS = List.of("/api/v1/cart/**" , "/api/v1/cartItems/**");
 
-    public ShopConfig(ShopUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint) {
+    public ShopConfig(ShopUserDetailsService userDetailsService, JwtAuthEntryPoint authEntryPoint, JwtUtils jwtUtils) {
         this.userDetailsService = userDetailsService;
         this.authEntryPoint = authEntryPoint;
+        this.jwtUtils = jwtUtils;
     }
 
 
@@ -49,8 +52,8 @@ public class ShopConfig {
     }
 
     @Bean
-    public AuthTokenFilter authTokenFilter(){
-        return new AuthTokenFilter();
+    public AuthTokenFilter authTokenFilter() {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
     }
 
 
