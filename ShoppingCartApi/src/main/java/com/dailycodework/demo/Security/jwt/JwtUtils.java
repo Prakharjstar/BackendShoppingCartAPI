@@ -20,11 +20,8 @@ public class JwtUtils {
 
     @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
-
     @Value("${auth.token.expirationInMils}")
     private int expirationTime;
-
-
 
     public String generateTokenForUser(Authentication authentication){
         ShopUserDetails userPrincipal = (ShopUserDetails) authentication.getPrincipal();
